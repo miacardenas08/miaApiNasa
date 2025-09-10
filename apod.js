@@ -1,26 +1,36 @@
-let contenedor = document.querySelector('.contenedor')
-
-fetch('https://api.nasa.gov/planetary/apod?api_key=emAX7kURdpbL53UttDOLM2dhrthdEzYY3BtUbdhG&count=18')
-
-.then(respuesta => respuesta.json())
-.then(datos => {
-    console.log(datos)
-    //img.src = datos[0].url
-    for (let i = 0; i < datos.length; i++) {
-        //const element = array[index];
-        contenedor.innerHTML += '<h1>'+datos[i].title+'</h1><img src="'+datos[i].url+'" alt"">' 
-    }
-})
 
 
-fetch("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY")
+let contenedor = document.querySelector("#contenedor");
+
+  fetch("https://api.nasa.gov/planetary/apod?api_key=4jmR71o3hrbJsbrjwZmqU2l3mUCEW98eglp9T1el&count=3")
   .then(res => res.json())
-  .then(datos => {
-    const contenedor = document.querySelector("#contenedor");
+  .then(imagenes => {
+    // Guardamos el div contenedor
     
-    contenedor.innerHTML = 
-    `<h2>${datos.title}</h2>
-      <p><strong>Fecha:</strong> ${datos.date}</p>
-      <img src="${datos.url}" alt="${datos.title}" width="500px">
-      <p>${datos.explanation}</p>`;
+    contenedor.innerHTML = ""; // Limpiamos antes de ingresar
+    for (let i = 0; i < imagenes.length; i++) {
+      // En cada vuelta del bucle obtenemos un objeto (una "imagen" de la API)
+      let img = imagenes[i];
+
+      // Agregamos al contenedor un bloque de HTML dinámico
+      contenedor.innerHTML += `
+      <div class="tarjeta">
+        <!-- Mostramos el título -->
+        <h3>${img.title}</h3>
+  
+        <!-- Mostramos la fecha -->
+        <p><strong>Fecha:</strong> ${img.date}</p>
+  
+     
+          <img src="${img.url}" alt="${img.title}" width="400">
+  
+        <!-- Mostramos la explicación que viene en el objeto -->
+        <p>${img.explanation}</p>
+      </div>
+    `;
+    }
+
   });
+
+
+
