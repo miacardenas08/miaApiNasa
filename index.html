@@ -6,10 +6,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+   <style>
+    body {
+      margin: 0;
+      font-family: 'Audiowide', sans-serif;
+      background: linear-gradient(to bottom, #000428, #004e92);
+      color: #fff;
+    }
+    header {
+      text-align: center;
+      padding: 15px;
+      background: rgba(0,0,0,0.6);
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .card h3 {
+      margin: 10px;
+      color: #ffcc00;
+    }
+    .card p {
+      margin: 10px;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
-    <div id="contenedor">
-    </div>
+  <header>🌌 Explorador Espacial</header>
+  <section class="grid" id="gallery"></section>
+
+  <script>
+    const apiKey = "DEMO_KEY";
+    const gallery = document.getElementById("gallery");
+
+    async function loadImages() {
+      // Traer varias imágenes (últimos 7 días)
+      for (let i = 0; i < 7; i++) {
+        let date = new Date();
+        date.setDate(date.getDate() - i);
+        let isoDate = date.toISOString().split("T")[0];
+
+        const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${isoDate}`);
+        const data = await res.json();
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        if (data.media_type === "image") {
+          card.innerHTML = `
+            <img src="${data.url}" alt="${data.title}">
+            <h3>${data.title}</h3>
+            <p>${data.date}</p>
+          `;
+        } else {
+          card.innerHTML = `
+            <iframe width="100%" height="200" src="${data.url}" frameborder="0"></iframe>
+            <h3>${data.title}</h3>
+            <p>${data.date}</p>
+          `;
+        }
+
+        gallery.appendChild(card);
+      }
+    }
+
+    loadImages();
+  </script>
 </body>
-<script src="apod.js"></script>
+    <script src="apod.js"></script>
 </html>
+
